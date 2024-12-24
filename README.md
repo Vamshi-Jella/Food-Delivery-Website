@@ -2,7 +2,7 @@
 - First install node to our project
   - npm init -y
 - Then install required packages modulus (Dependencies) 
-  - Express , Mongoose, Dotenv, Body-parser, nodemon  
+  - Express , Mongoose, Dotenv, Body-parser, Nodemon  
   - After install they can be seen in package.json - "dependencies"
   - npm install express mongoose dotenv body-parser nodemon
 
