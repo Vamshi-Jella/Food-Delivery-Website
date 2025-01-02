@@ -13,8 +13,17 @@
   - nodemon vala file ni save chestey automatic ga changes update iyi output vastadi
 
 - Create Server and Route
-- Connect with MongoDb
+- Connecting with Database (MongoDB)
+  - Go to the MongoDb site & signup
+  - Create a new project - name it - click on create
+  - Select cluster (free cluster) - click on create deployment
+  - Then give a password & create database user
+  - Remove old IP address & set IP address to 0.0.0.0 - so that we can access from anywhere
+  - Go the Overview Cluster - click on "Connect - Drivers" - then copy MongoURL
+  - Create a file - ".env"- store our MongoURL to a varaible
   - .env file lo MONGO_URI="link<our_databaseuser_password>/Project_Name?" 
+  - Replace <password>=our DataUser password
+  - Write our Project Name in "mongodb.net/PROJECTNAME?retry"
   - .env file lo unnavi access cheyali antey 
   - dotEnv.config()
   - write " process.env.Variable " whereever it required

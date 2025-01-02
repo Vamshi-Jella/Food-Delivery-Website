@@ -13,3 +13,7 @@ app.listen(PORT,()=>{
 app.use('/home',(req,res)=>{
     res.send("<h1> Welcome");
 })
+
+app.use('/Admin',(req,res)=>{
+    res.send("<h1> Welcome to Admin Page");
+})
