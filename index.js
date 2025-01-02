@@ -14,6 +14,13 @@ app.use('/home',(req,res)=>{
     res.send("<h1> Welcome");
 })
 
-app.use('/Admin',(req,res)=>{
+app.use('/admin',(req,res)=>{
     res.send("<h1> Welcome to Admin Page");
+})
+
+app.use('/login',(req,res)=>{
+    res.send("<h1> login page ");
+})
+app.use('/menu',(req,res)=>{
+    res.send("<h1> Welcome to menu page ");
 })
