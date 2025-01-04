@@ -22,3 +22,7 @@ app.use('/home',(req,res)=>{
     res.send("<h1> Welcome");
 });
 
+app.use('/homes',(req,res)=>{
+    res.send("<h1> Welcome");
+});
+
