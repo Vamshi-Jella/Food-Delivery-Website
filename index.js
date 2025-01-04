@@ -7,7 +7,7 @@ const app = express();
 const PORT=4000;
 
 dotEnv.config() 
-// Connecting to Database
+
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>console.log("MongoDB connected successfully!"))
 .catch((error)=>console.log(error))
@@ -20,5 +20,5 @@ app.listen(PORT,()=>{
 
 app.use('/home',(req,res)=>{
     res.send("<h1> Welcome");
-})
+});
 

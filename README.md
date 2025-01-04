@@ -13,19 +13,20 @@
   - nodemon vala file ni save chestey automatic ga changes update iyi output vastadi
 
 - Create Server and Route
-  <!-- - Creating Server -->
-  - const express= require("express"); 
-  <!-- Manam install cheshi express ni import chesukoniki - require("express") -->
-  - const app = express();
-  <!-- express nunchi vastuna methods ani e app variable ki assign chestam -->
-  - const PORT=4000;
-  - app.listen(PORT,()=>{
+  - Creating Server 
+  - " const express= require("express"); "
+  - Manam install cheshi express ni import chesukoniki - require("express")
+  - " const app = express(); "
+  - express nunchi vastuna methods ani e app variable ki assign chestam
+  - " const PORT=4000; "
+  - " app.listen(PORT,()=>{
     console.log(`Server started & running at ${PORT}`);
-    });
-  <!-- By using above server we are defining route -->
-  - app.use('/home',(req,res)=>{
+    }); "
+  - By using above server we are defining route
+  - Creating Routes
+  - " app.use('/home',(req,res)=>{
     res.send("<h1> Welcome");
-    })
+    }); 
 
 - Connecting with Database (MongoDB)
   - Go to the MongoDb site & signup
@@ -41,15 +42,15 @@
   - .env file lo unavi evariki share avadu
   - .env file lo unavi mana project ki access cheyali antey dotenv dependency package install chesukovali, dotenv ni oka variable ki assign cheyali
   - dotEnv.config() to .env file lo unavi access cheyavachu
-  <!-- const dotEnv= require('dotenv'); -->
-  <!-- dotEnv.config(); -->
+  - " const dotEnv= require('dotenv'); "
+  - " dotEnv.config(); "
 
-  <!-- - write " process.env.Variable " whereever it required -->
-  <!-- Mongoose to MongoDB database ki connect chestam -->
-  - const mongoose= require("mongoose");
-  - mongoose.connect(process.env.MONGO_URI)
+  - write " process.env.Variable " whereever it required
+  - Mongoose to MongoDB database ki connect chestam
+  - " const mongoose= require("mongoose"); "
+  - " mongoose.connect(process.env.MONGO_URI)
   - .then(()=>console.log("MongoDB connected successfully!"))
-  - .catch((error)=>console.log(error))
+  - .catch((error)=>console.log(error)) "
 
 - Vendor Registration
 - Creating models
