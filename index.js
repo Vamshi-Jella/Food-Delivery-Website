@@ -1,15 +1,23 @@
-// Creating Server
 const express= require("express"); 
-// Manam install cheshi express ni import chesukoniki - require("express")
+const dotEnv= require('dotenv');
+const mongoose=require('mongoose');  
+
 const app = express();
-// express nunchi vastuna methods ani e app variable ki assign chestam
+
 const PORT=4000;
+
+dotEnv.config() 
+
+mongoose.connect(process.env.MONGO_URI)
+.then(()=>console.log("MongoDB connected successfully!"))
+.catch((error)=>console.log(error))
+
 
 app.listen(PORT,()=>{
     console.log(`Server started & running at ${PORT}`);
 });
 
-// By using above server we are defining route
+
 app.use('/home',(req,res)=>{
     res.send("<h1> Welcome");
 })
