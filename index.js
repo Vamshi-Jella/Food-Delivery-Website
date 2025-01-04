@@ -7,7 +7,7 @@ const app = express();
 const PORT=4000;
 
 dotEnv.config() 
-
+// Connecting to Database
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>console.log("MongoDB connected successfully!"))
 .catch((error)=>console.log(error))
@@ -22,13 +22,3 @@ app.use('/home',(req,res)=>{
     res.send("<h1> Welcome");
 })
 
-app.use('/admin',(req,res)=>{
-    res.send("<h1> Welcome to Admin Page");
-})
-
-app.use('/login',(req,res)=>{
-    res.send("<h1> login page ");
-})
-app.use('/menu',(req,res)=>{
-    res.send("<h1> Welcome to menu page ");
-})
