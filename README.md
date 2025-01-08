@@ -1,4 +1,5 @@
 # Food-Delivery-Website
+# Multi Vendor Restaurant APP
 - First install node to our project
   - npm init -y
 - Then install required packages modulus (Dependencies) 
@@ -25,8 +26,8 @@
   - By using above server we are defining route
   - Creating Routes
   - " app.use('/home',(req,res)=>{
-    res.send("<h1> Welcome");
-    }); 
+     res.send("<h1> Welcome");
+     }); "
 
 - Connecting with Database (MongoDB)
   - Go to the MongoDb site & signup
@@ -52,8 +53,51 @@
   - .then(()=>console.log("MongoDB connected successfully!"))
   - .catch((error)=>console.log(error)) "
 
-- Vendor Registration
-- Creating models
-  -  Each vendor ki authentication echi products add chesukovachu
+- Building APIs
+  - Authentication - once register iyaka nxt time identity id tho login avachu ade authentication
+  - Creating APIs - Models , Controllers, Routes
+
+- Creating Models, Controllers, Routes
+
+  - Each vendor ki authentication echi products add chesukovachu
   - Vendor ki unique Authentication kosam username, email password estam
-  - vendorSchema properties to eni records iyina create cheyachu -- avi tables lo save cheyaniki Controllers & Routes kavali
+  - VendorSchema properties to eni records iyina create cheyachu -- avi tables lo save cheyaniki Controllers & Routes kavali
+  - Controllers lo emo mana performance oka logic rastam
+  - Create Models, Controllers, Routes folder - Create a Vendor.js file, vendorControllers.js,Vendor
+
+- - Creating Models files
+  - Schema define cheyaniki mongoose kavali
+  - " const mongoose=require("mongoose");"
+  - Vendor properties(username, unique email, password) to schema define chestam
+  - " const vendorSchema=new mongoose.Schema({
+      username:{
+        type:String,
+        required:true
+      },
+      email:{
+        type:String,
+        required:true,
+        unique:true
+      },
+      password:{
+        type:String,
+        required:true
+      }
+    }); "
+  - For reusing it , export Vendor model
+  - " const Vendor = mongoose.model('Vendor',vendorSchema);
+  - module.exports = Vendor; "
+
+- - Creating Controllers files
+  - First import Vendor model which is two steps outside from controller file
+  - " const Vendor=require('../models/Vendor'); "
+
+- Vendor Registration through JWT token, bcryptjs
+  - " const vendorRegister=async (req,res) => {
+    const {username,email,password}=req.body - #request(body-input data) dwara vastai ga
+    };"
+  - Input dwara vachina Vendor properties - unique email ena? ani check cheshi - A email ni Token echi save chestam database lo - deni ey "Token based Authentication" by installing "Jwt token" dependency package - "JWT - jsonwebtoken"
+  - Password ni hashing cheshi save chestam - by installing "bcryptjs" dependency package
+  - "npm install jsonwebtoken bcryptjs"
+  - " const jwt = require('jsonwebtoken'); "
+  - " const bcrypt = require('bcryptjs');
