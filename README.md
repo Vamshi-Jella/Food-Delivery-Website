@@ -152,3 +152,32 @@
     
     "module.exports = router;"
     // main router ni export chestey - dani lo unna ani routes export ithadi
+  - index.js lo vendorRoutes file ni export cheshi http request cheyochu using middleware
+    - " const vendorRoutes = require('./routes/vendorRoutes');"
+    - middleware create cheydam - app.use('/path',filename)
+    - " app.use('/vendor',vendorRoutes); " // path name vendor echam
+  - ela vendorRoutes- oka route create chesham
+
+- Converting into JSON format
+  - Input fields nunchi vachey data ni JSON format lo pass cheyali by using "body-parser" package
+  - Import body-parser in index.js 
+  - "const bodyParser = require('body-parser');"
+  - "app.use(bodyParser.json());" // Input fields data ni JSON format lo pass/convert chestadi using middleware method
+
+- API testing 
+  - path-vendor , endpoint-register to API ni test cheyochu
+  - mana API - post method to create chesham - We can test it in "POSTMAN Software" - we can't test in browser
+  - Go to the software - Select Contract Testing - Select method(POST) - Enter (localhost:PORT_No./path_name/endpoint) - Click on body - Select Raw - Select JSON - Enter properties data which is in vendorSchema
+  - "username":"Apple",
+    "email":"email@gmail.com",
+    "password":"123"
+  - Click on send - we will get the response & message 
+  - enter npm run dev in terminal
+  - if there is no errors - we will get "registered" - which is from "vendorController.js-vendorRegister function"
+  - "res.status(201).json({message:"Vendor registered successfully"});" - we get this message in POSTMAN 
+  - "console.log('registered');" - terminal
+  - Go to the MongoDB site - our Project folder - click on browse collections - we can see our data
+  - mana Models lo "vendor" ani unte - MongoDB lo "vendors" ani table create iyi untadi - danitlo manam post cheshina data untadi - id: , username:, email:,password:hashed_ga_untadi
+  - ela mana post cheshina data - MongoDB (Database) lo record ithadi
+  - Incase, already registered email estey - email already taken ani response vastadi - Database lo em record kadu
+  
