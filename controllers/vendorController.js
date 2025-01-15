@@ -31,4 +31,26 @@ const vendorRegister=async (req,res) => {
     }
 } 
 
-module.exports = {vendorRegister}
+const vendorLogin = async (req,res) => {
+    const {email,password} = req.body; //  Taking data (email,password) which is coming from body(input)
+     try {
+        // vendor model lo already register iyina email ni get cheshi, "vendor" ane variable ki assign chestunam
+        // Database lo "vendors" table lo unna email
+        // Input lo type cheshina email-password(login details) correct ena ani check chestunam
+          const vendor = await Vendor.findOne({email}); //email ni Database lo find cheshi- "vendor" ki asiign chesham - epudu vendor ante  login aye candidate oka email id
+         if(!vendor || !(await bcrypt.compare(password, vendor.password))){  
+            // await - enduku antey, bcrypt(hashed) format lo unna password ni normal ga convert cheyaniki time tesukuntadi 
+            // Database(bcrypt format lo unna, password ni normal ga convert cheshi ) - dani, input dwara vachina login password(vendor.password) ni compare cheshi- match avakapothey (or) vendor(email) correct kakapothey - e response vastadi
+            return res.status(401).json({error:"Invalid username or password"});
+            // 401 - indicates error
+         }  
+         // If email-password match ithey
+         res.status(200).json({success:"Login successful"});
+         console.log(email);
+     } catch (error) {
+        
+     }
+}
+
+
+module.exports = {vendorRegister, vendorLogin}

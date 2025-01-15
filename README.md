@@ -4,30 +4,39 @@
   - npm init -y
 - Then install required packages modulus (Dependencies) 
   - Express , Mongoose, Dotenv, Body-parser, Nodemon  
-  - After install they can be seen in package.json - "dependencies"
   - npm install express mongoose dotenv body-parser nodemon
+  - After install they can be seen in package.json - "dependencies"
+  - Set main file as index.js - "main": "index.js",
+  - We can give name, description & author in package.json
 
 - To run the project , we have to define commands in two phases( Development & Deployment) in package.json -"scripts"
   - For Development phase - "dev": "nodemon run dev"
   - For Deployment phase - "start": "index" - where index file is gateway file which we generate output
+  - "scripts": {
+    "dev": "nodemon run dev",
+    "start": "node index"
+    },
   - npm run dev - Project will get excuted and shows output
   - nodemon vala file ni save chestey automatic ga changes update iyi output vastadi
 
-- Create Server and Route
+- Create Server and Route in index.js
   - Creating Server 
   - " const express= require("express"); "
   - Manam install cheshi express ni import chesukoniki - require("express")
   - " const app = express(); "
   - express nunchi vastuna methods ani e app variable ki assign chestam
-  - " const PORT=4000; "
+  - " const PORT=4000; " 
+  - edo oka PORT no. estam - our application will run in our localhost at this PORT no. (localhost:4000)
   - " app.listen(PORT,()=>{
     console.log(`Server started & running at ${PORT}`);
     }); "
-  - By using above server we are defining route
+  - By using above Server, we are defining Routes
   - Creating Routes
   - " app.use('/home',(req,res)=>{
      res.send("<h1> Welcome");
      }); "
+  - "localhost:4000/home" - edi browser lo type chestey above response("Welcome") vastadi
+
 
 - Connecting with Database (MongoDB)
   - Go to the MongoDb site & signup
@@ -37,17 +46,18 @@
   - Remove old IP address & set IP address to 0.0.0.0 - so that we can access from anywhere
   - Go the Overview Cluster - click on "Connect - Drivers" - then copy MongoURL
   - Create a file - ".env"- store our MongoURL to a varaible
-  - .env file lo MONGO_URI="link<our_databaseuser_password>/Project_Name?" 
+  - .env file lo ela variable ki link assign cheyali
+  - " MONGO_URI="link<our_databaseuser_password>/Project_Name?" "
   - Replace <password>=our DataUser password
-  - Write our Project Name in "mongodb.net/PROJECTNAME?retry"
+  - Write our Project Name in "mongodb.net/PROJECT-NAME?retry"
   - .env file lo unavi evariki share avadu
   - .env file lo unavi mana project ki access cheyali antey dotenv dependency package install chesukovali, dotenv ni oka variable ki assign cheyali
   - dotEnv.config() to .env file lo unavi access cheyavachu
   - " const dotEnv= require('dotenv'); "
   - " dotEnv.config(); "
-
   - write " process.env.Variable " whereever it required
-  - Mongoose to MongoDB database ki connect chestam
+
+  - Mongoose tho MongoDB database ki connect chestam
   - " const mongoose= require("mongoose"); "
   - " mongoose.connect(process.env.MONGO_URI)
   - .then(()=>console.log("MongoDB connected successfully!"))
@@ -61,11 +71,12 @@
 
   - Each vendor ki authentication echi products add chesukovachu
   - Vendor ki unique Authentication kosam username, email password estam
-  - VendorSchema properties to eni records iyina create cheyachu -- avi tables lo save cheyaniki Controllers & Routes kavali
+  - VendorSchema properties tho eni records iyina create cheyachu -- avi tables lo save cheyaniki Controllers & Routes kavali
   - Controllers lo emo mana performance oka logic rastam
-  - Create Models, Controllers, Routes folder - Create a Vendor.js file, vendorControllers.js,Vendor
+  - Create Models, Controllers, Routes folder
+  - Create a Vendor.js file in models folder, vendorControllers.js in controllers folder, vendorRoutes.js in routes folder
 
-- - Creating Models files
+- - Creating Models files - Vendor.js
   - Schema define cheyaniki mongoose kavali
   - " const mongoose=require("mongoose");"
   - Vendor properties(username, unique email, password) to schema define chestam
@@ -85,33 +96,34 @@
       }
     }); "
   - For reusing it , export Vendor model
-  - " const Vendor = mongoose.model('Vendor',vendorSchema);
-  - module.exports = Vendor; "
+  - " const Vendor = mongoose.model('Vendor',vendorSchema); "
+  - " module.exports = Vendor; "
 
 - vendorController.js
-- - Creating Controllers files
+- - Creating Controllers files - vendorController.js
   - First import Vendor model which is two steps outside from controller file
   - " const Vendor=require('../models/Vendor'); "
 
 - Vendor Registration through JWT token, bcryptjs
   - " const vendorRegister=async (req,res) => {
-    const {username,email,password}=req.body - #request(body-input data) dwara vastai ga
+    const {username,email,password}=req.body; - #request(body-input form data) dwara vastai ga
     };"
-  - Input dwara vachina Vendor properties - unique email ena? ani check cheshi - A email ni Token echi save chestam database lo - deni ey "Token based Authentication" by installing "Jwt token" dependency package - "JWT - jsonwebtoken"
+  - Input dwara vachina Vendor properties - unique email ena? ani check cheshi - Ah email ni Token echi save chestam database lo - deni ey "Token based Authentication" antaru
+  - By installing "Jwt token" dependency package - "JWT - jsonwebtoken"
   - Password ni hashing cheshi save chestam - by installing "bcryptjs" dependency package
-  - "npm install jsonwebtoken bcryptjs"
+  - "npm install jsonwebtoken bcryptjs" 
   - " const jwt = require('jsonwebtoken'); "
-  - " const bcrypt = require('bcryptjs');
+  - " const bcrypt = require('bcryptjs'); "
   
 - - Vendor Registration function export cheyali
   -  const vendorRegister=async (req,res) => {
-      const {username,email,password}=req.body;
+      const {username,email,password}=req.body; // Taking data(username, email, password) from body-input form data
       try {
         const vendorEmail= await Vendor.findOne({email}); //by using findone method-vendor nunchi email tesukoni, unique email ena? ani check chestam
         if (vendorEmail){ //already email unte true iyi - email taken ani vastadi
             return res.status(400).json("Email already taken");
         }
-        const hashedPassword = await bcrypt.hash(password,10); //password ni hash chestunam, 10 - oka algorithm antey 10 times exicute iyi - final ga vachina hashed password ni e variable ki assign chestunam
+        const hashedPassword = await bcrypt.hash(password,10); //password ni hash chestunam, 10 - oka algorithm antey, 10 times exicute iyi - final ga vachina hashed password ni e variable ki assign chestunam
         // req.body - body nunchi vastuna input values ni Database lo store cheyaniki - oka instance ni create cheshi dani dwara , records - Database lo store cheyavachu
         const newVendor = new Vendor({
             username,
@@ -181,3 +193,33 @@
   - ela mana post cheshina data - MongoDB (Database) lo record ithadi
   - Incase, already registered email estey - email already taken ani response vastadi - Database lo em record kadu
   
+
+- Vendor Login
+  - Vendor okasari register iyaka - direct login avochu
+  - Create vendorLogin function
+  - "const vendorLogin = async (req,res) => {
+    "const {email,password} = req.body;" 
+    //  Taking data (email,password) which is coming from body(input)
+     try {
+        // vendor model lo already register iyina email ni get cheshi, "vendor" ane variable ki assign chestunam
+        // Database lo "vendors" table lo unna email
+        // Input lo type cheshina email-password(login details) correct ena ani check chestunam
+          "const vendor = await Vendor.findOne({email});" 
+          //email ni Database lo find cheshi- "vendor" ki asiign chesham - epudu vendor ante  login aye candidate oka email id
+         "if(!vendor || !(await bcrypt.compare(password, vendor.password))){  
+            // await - enduku antey, bcrypt(hashed) format lo unna password ni normal ga convert cheyaniki time tesukuntadi 
+            // Database(bcrypt format lo unna, password ni normal ga convert cheshi ) - dani, input dwara vachina login password(vendor.password) ni compare cheshi- match avakapothey (or) vendor(email) correct kakapothey - e response vastadi
+            return res.status(401).json({error:"Invalid username or password"});
+            // 401 - indicates error
+         }"  
+         // If email-password match ithey
+         "res.status(200).json({success:"Login successful"});"
+         "console.log(email);"
+      } catch (error) {
+        
+     }
+   }
+   - "module.exports = {vendorRegister, vendorLogin}"
+
+   - Same, vendorLogin ni Route ga cheyaniki - export cheshi, vendorRoutes.js lo endpoint echi Route create chestam(POST method tho) - POSTMAN lo check chestam
+   - "router.post('/login',vendorController.vendorLogin);"
