@@ -223,3 +223,119 @@
 
    - Same, vendorLogin ni Route ga cheyaniki - export cheshi, vendorRoutes.js lo endpoint echi Route create chestam(POST method tho) - POSTMAN lo check chestam
    - "router.post('/login',vendorController.vendorLogin);"
+
+  - ela Vendor oka basic Authentication complete iyindi
+
+- JWT Token
+  - MongoDB lo each Vendor ki oka unique id create ithadi,security kosam ede id ni Token ga marustam - ade JWT Token 
+  - Incase,MongoDB lo unna id vary valaki tesina, expose iyina, vary vallu e Vendor account ni access cheyakunda, e Tokens use ithadi
+  - "JSON Web Tokens-jwt.io" website lo ela vendor property values bati Token generate ithundi ani visual ga untadi
+  - Vendor oka properties details, values bati Tokens generate ithadi
+  - Anduke JWT package install chesukunam
+
+  - vendorLogin function lo Token create chestunam, after successful ga Login iyaka Token generate chestunam based on the unique id
+  - Install JWT package
+  - "const jwt = require('jsonwebtoken');"
+  - "const token =jwt.sign({vendorId:vendor._id},secretKey,{ expiresIn: "1h"});"
+  - jwt.sign() - inbuilt method - deni tho, properties base chesukoni - Token generate cheyochu
+  - vendor oka "_id" property ni "vendorId" ki assign chestunam
+  - secretKey - second parameter ga pass chestam
+  - Third parameter - optional - "{ expiresIn: "1h"}" pass chestunam - antey 1hr trvata Token expire iyi, nko kothadi generate ithadi
+  - Secret key mana own ga create chestam
+  - Creating Secret_key
+  - " WhatIsYourName="Food-Delivery-Website" "
+  - Secret key kosam, dotenv lo variable assign cheshi, dani access cheyaniki "dotenv" ni import chesukovali vendorControllers.js file loki - by dotenv.config() method
+  - "const dotEnv = require('dotenv');"
+  - "dotEnv.config();"
+  - "const secretKey= process.env.WhatIsYourName ;"
+  - process.env dwara env lo unna mana secret key, 'secretKey' variable ki assign chesham
+  - secretKey - parameter ga pass chestam
+  - "const token =jwt.sign({vendorId:vendor._id},secretKey,{ expiresIn: "1h"});"
+  - "res.status(200).json({success:"Login successful",token});"
+  - "console.log(email,"this is token", token);"
+  - Token ni console lo chupistadi, Login iyina everytime, Token console lo vastadi - even without changing any properties - every Login ki different Token generate ithadi - Security ga chala help ithadi e Tokens (JWT Tokens)
+
+
+- Adding Firm/Restaurant to Vendor
+  - Each Vendor ki - oka Firm/Restaurant untadi - ah Firm lo koni products untai 
+  - Every Vendor ki unique Tokens generate avadam vala - Customer products ni select chesukuntey - crt ga ade Restaurant/Firm nunchi ey, vala Vendor ki select avutadi
+  - Vendor ki Token based approach to Restaurant/Firm add chestam
+  - We can't add Firm using id - because adi Database lo static ga akkada ne untadi, change avadu , security ga safe approach kadu
+  - If e id dwara compare chestey, request send cheshina partisari, Database lo interact(velli) check(compare) cheydam vala - application slow/late avutadi
+  - JWT Token ithey - Database lo undadu - Login iyina travta ne , Token vastadi 
+  - ala vachina Token ni - manam server ki request send cheshey tapudu, e token ni kuda send chestam - e Token crt ithane, server manaku crt response vastadi
+  - manam Login iyina partisari Token change ithadi kabati, ede safe approach
+
+- Vendor ki - Firm/Restaurants untai
+- oka Restaurant ki - different address, places lo untai kabati - direct, ani Restaurants ni kalipi - okate Firm ga consider chestam
+
+- Creating Firm
+  - Same Firm ki model, controller, route create cheyali, Firm-Vendor ki relation create cheyali
+
+- Creating Firm Model
+  - Firm Model properties : { firmName, area,category,region, offer, image}
+  - e properties to schema create chestam
+  - Model kabati file name with Capital letter lo - Firm.js in models folder
+  - e Firm ni Vendor ki add cheshey tapudu, Token based ga add cheydam anukunam kabati
+  - First firm ready iyaka, Token ni initiate cheshi, ah Token dwara Firm ni Vendor ki add cheydam
+  - "const firmSchema= new mongoose.Schema({
+      firmName: {
+        type: String,
+        required: true,
+        unique:true
+      },
+      area: {
+        type: String,
+        required: true,
+      },
+      category:{
+        type:[
+            {
+                type:String,
+                enum:['Veg', 'Non-Veg']
+            }
+         ]
+      },
+    - Multiple Values ki - properties ela rayali
+      region:{
+        type:[
+            {
+               type:String,
+               enum: ['South-Indian','North-Indian','Chinese','Bakery']   
+            }
+         ]
+      },
+      offer:{
+        type:String,
+      },
+      image:{
+        type:String
+      },
+      vendor:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'vendor'
+        }
+      ]
+      - epudu ithey type lo - default method pass cheshamo, apudu e Firm ah Vendor Model ki link ithadi / relate chestunam
+      - nko key value eyali - reference -"ref" - ae Model tho - Database lo unna ae table tho, e Firm table relate avutundi / relate cheyali ani
+      - ela Firm-Vendor relation form chestam
+      
+    });"
+  
+  - ela Firm Model create chesham
+  - e Firm Model ni export cheyali 
+  - "const Firm = mongoose.model('Firm', firmSchema);"
+  - "module.exports= Firm;"
+
+  - elage e relation ni Vendor Model lo add cheyali
+  - " firm:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'Firm'
+        }
+     ]" - edi vendorSchema lo add cheyali
+  - ela Firm-Vendor relation form chestam
+
+- Creating Firm Controller
+  - 

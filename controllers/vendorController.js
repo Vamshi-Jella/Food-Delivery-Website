@@ -1,6 +1,12 @@
 const Vendor = require('../models/Vendor');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const dotEnv = require('dotenv');
+
+dotEnv.config();
+
+const secretKey= process.env.WhatIsYourName ;
+// process.env dwara env lo unna key 'secretKey' variable ki assign chesham
 
 const vendorRegister=async (req,res) => {
     const {username,email,password}=req.body;
@@ -43,10 +49,15 @@ const vendorLogin = async (req,res) => {
             // Database(bcrypt format lo unna, password ni normal ga convert cheshi ) - dani, input dwara vachina login password(vendor.password) ni compare cheshi- match avakapothey (or) vendor(email) correct kakapothey - e response vastadi
             return res.status(401).json({error:"Invalid username or password"});
             // 401 - indicates error
-         }  
+         } 
+         
+         const token =jwt.sign({vendorId:vendor._id},secretKey,{ expiresIn: "1h"});
+         // jwt.sign() - inbuilt method - deni tho properties base chesukoni - Token generate cheyochu
+         // vendor oka "_id" property ni "vendorId" ki assign chestunam
+
          // If email-password match ithey
-         res.status(200).json({success:"Login successful"});
-         console.log(email);
+         res.status(200).json({success:"Login successful",token});
+         console.log(email,"this is token", token);
      } catch (error) {
         
      }
