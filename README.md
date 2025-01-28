@@ -198,27 +198,36 @@
   - Vendor okasari register iyaka - direct login avochu
   - Create vendorLogin function
   - "const vendorLogin = async (req,res) => {
-    "const {email,password} = req.body;" 
-    //  Taking data (email,password) which is coming from body(input)
-     try {
-        // vendor model lo already register iyina email ni get cheshi, "vendor" ane variable ki assign chestunam
-        // Database lo "vendors" table lo unna email
-        // Input lo type cheshina email-password(login details) correct ena ani check chestunam
-          "const vendor = await Vendor.findOne({email});" 
-          //email ni Database lo find cheshi- "vendor" ki asiign chesham - epudu vendor ante  login aye candidate oka email id
-         "if(!vendor || !(await bcrypt.compare(password, vendor.password))){  
-            // await - enduku antey, bcrypt(hashed) format lo unna password ni normal ga convert cheyaniki time tesukuntadi 
-            // Database(bcrypt format lo unna, password ni normal ga convert cheshi ) - dani, input dwara vachina login password(vendor.password) ni compare cheshi- match avakapothey (or) vendor(email) correct kakapothey - e response vastadi
-            return res.status(401).json({error:"Invalid username or password"});
-            // 401 - indicates error
-         }"  
-         // If email-password match ithey
-         "res.status(200).json({success:"Login successful"});"
-         "console.log(email);"
-      } catch (error) {
-        
-     }
-   }
+    - "const {email,password} = req.body;" 
+    - Taking data (email,password) which is coming from body(input)
+     - try {
+        -   vendor model lo already register iyina email ni get cheshi, "vendor" ane variable ki assign chestunam
+        - Database lo "vendors" table lo unna email
+        - Input lo type cheshina email-password(login details) correct ena ani check chestunam
+
+        - "const vendor = await Vendor.findOne({email});" 
+
+        - email ni Database lo find cheshi- "vendor" ki asiign chesham - epudu vendor ante  login aye candidate oka email id
+        - "if(!vendor || !(await bcrypt.compare(password, vendor.password))){  
+            - await - enduku antey, bcrypt(hashed) format lo unna password ni normal ga convert cheyaniki time tesukuntadi 
+            -  Database(bcrypt format lo unna, password ni normal ga convert cheshi ) - dani, input dwara vachina login password(vendor.password) ni compare cheshi- match avakapothey (or) vendor(email) correct kakapothey - e response vastadi
+
+            - "return res.status(401).json({error:"Invalid username or password"});"
+            - 401 - indicates error
+         - }"  
+
+         - "const token =jwt.sign({vendorId:vendor._id},secretKey,{ expiresIn: "1h"});"
+         - jwt.sign() - inbuilt method - deni tho properties base chesukoni - Token generate cheyochu
+         -  vendor oka "_id" property ni "vendorId" ki assign chestunam
+
+         - If email-password match ithey
+         - "res.status(200).json({success:"Login successful",token});"
+         - "console.log(email,"this is token", token);"
+     - } catch (error) {
+         - "console.log(error);"
+         - "res.status(500).json({error:"Internal server error"});"
+      - }
+  - }
    - "module.exports = {vendorRegister, vendorLogin}"
 
    - Same, vendorLogin ni Route ga cheyaniki - export cheshi, vendorRoutes.js lo endpoint echi Route create chestam(POST method tho) - POSTMAN lo check chestam
@@ -337,5 +346,47 @@
      ]" - edi vendorSchema lo add cheyali
   - ela Firm-Vendor relation form chestam
 
-- Creating Firm Controller
-  - 
+- Creating Firm Controller - firmController.js
+  - e Firm ki vendor add cheyaniki - Controller kavali - e Controller lo logic rastam 
+  - logic rayaniki Token awasaram - Ah Toekn already "vendorController.js" lo "vendorId" ni base chesukoni undi
+  - e Token ni verify cheshi & e Token dwara, Firm ni vendor add cheydaniki - e Middleware use avutadi
+  - Creating Middleware
+    - Create a Middleware folder - verifyToken.js - e file lo Token ni verify cheyaniki logic rastam
+    
+    - vendorId - Vendor model lo undi kabati - Vendor ni require/import chesukovali
+    - "const Vendor = require('../models/Vendor');"
+    - Token ni verify chesukoni - JWT Token kavali
+    - "const jwt = require('jsonwebtoken');"
+
+    - Creating Middleware - it is async function with 3 parameters
+    -  request send cheshaka - response ok ithey ne - e next ane function, nxt further mana actions ni perform cheyaniki allow chestadi
+    - "const verifyToken = async(req,res,next){
+       - Headers lo Tokens ni pass chestunam
+       - manam request send cheshey partisari kuda , Alongwith request, e Headers lo unna values kuda server ki vellutadi
+       const token = req.headers.token;
+       - We can write .barrierend instead of .token
+       
+       - okavela Token flase ithey
+       - "if(!token){
+             - return res.status(401).json({error:"Token is required"});
+         - }
+         - We are creating a promise using try-catch 
+       - "try {
+            - vendorId dwara vachina token ni decode cheshi & Database lo unna ID ni compare cheshi verify chestadi
+            - "const decoded = jwt.verify(token, secretKey);"
+            - decode iyinadi e variable ki assign chestam
+            -  mana token ni (const token = req.headers.token;) decode iyina vendorId to verify chestunam 
+            - secretKey - .env file lo undi dani access chesukovali antey 
+            - "const dotEnv = require('dotenv');"
+            - "dotEnv.config();"
+            - "const secretKey = process.env.WhatIsYourName;"
+            - WhatIsYourName="Food-Delivery-Website"
+            - secretKey value("Food-Delivery-Website") assigned to variable (WhatIsYourName)
+            
+            - e decode cheshindi, vendorId(which is from vendorController.js) to verify chestunam
+            - "const vendor = await Vendor.findById(decoded.vendorId);"
+
+         - } catch (error) {
+              
+          -}
+    - }
