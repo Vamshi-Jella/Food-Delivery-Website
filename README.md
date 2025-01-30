@@ -349,7 +349,8 @@
 - Creating Firm Controller - firmController.js
   - e Firm ki vendor add cheyaniki - Controller kavali - e Controller lo logic rastam 
   - logic rayaniki Token awasaram - Ah Toekn already "vendorController.js" lo "vendorId" ni base chesukoni undi
-  - e Token ni verify cheshi & e Token dwara, Firm ni vendor add cheydaniki - e Middleware use avutadi
+  - e Token ni verify cheshi & e Token dwara, Firm ni vendor loki add cheydaniki - e Middleware use avutadi
+  - e verifyToken dwara Firm ni vendor loki add cheyochu
   - Creating Middleware
     - Create a Middleware folder - verifyToken.js - e file lo Token ni verify cheyaniki logic rastam
     
@@ -375,7 +376,6 @@
             - vendorId dwara vachina token ni decode cheshi & Database lo unna ID ni compare cheshi verify chestadi
             - "const decoded = jwt.verify(token, secretKey);"
             - decode iyinadi e variable ki assign chestam
-            -  mana token ni (const token = req.headers.token;) decode iyina vendorId to verify chestunam 
             - secretKey - .env file lo undi dani access chesukovali antey 
             - "const dotEnv = require('dotenv');"
             - "dotEnv.config();"
@@ -383,10 +383,109 @@
             - WhatIsYourName="Food-Delivery-Website"
             - secretKey value("Food-Delivery-Website") assigned to variable (WhatIsYourName)
             
-            - e decode cheshindi, vendorId(which is from vendorController.js) to verify chestunam
+            - e token(const token = req.headers.token) decode cheshindi, vendorId(which is coming from vendorModel) to verify chestunam
             - "const vendor = await Vendor.findById(decoded.vendorId);"
+            - await - vendor Model nunchi vendorId vastundi kabati
+            - Id ni get cheyaniki, Mongoose lo inbuilt function undi - "findById" 
+            - Id ni get cheshi - "vendor ane variable ki assign chestunam
+            - decoded.vendorId - ekkada Id ni decode chestunam
+            
+            - While decoding incase, if there is any error - "vendor not found" - ani response vastadi 
+            - "if(!vendor){
+              - return res.status(404).json({error:"vendor not found"});
+             - }
 
-         - } catch (error) {
-              
-          -}
-    - }
+            - decode iyina vendorId ni actual/Database lo unna vendor Id(vendor._id) to verify chestunam
+            - "req.vendorId= vendor._id;"
+            - req - e vendor Id ni request dwara vastundi kabati
+
+            - e try block lo  unna code(verify) true ithey - next function excution ithadi
+            - "next();"
+
+
+         - " } catch (error) { 
+              - "console.error(error);"
+              - "return res.status(500).json({error:"Invalid token"});"
+          - }"
+    - };"
+   
+   - Export this verifyToken
+   - "module.exports = verifyToken;"
+
+- firmController.js
+  - e verifyToken dwara Firm ni vendor loki add cheyochu - daniki firmController.js file lopana logic rayali
+  - "const Firm = require('../models/Firm');"
+  - "const Vendor = require('../models/Vendor');"
+  - "const multer = require('multer');"
+  - - Adding Images
+  - Multer package - dwara Image ni Database lo save cheyochu 
+  - install Multer package - "npm install multer"
+  - "const multer = require('multer');"
+  - oka standard format to Images ni save chestam
+  - Create a uploads folder - Destination folder - where the uploaded images will be stored
+  - "const storage = multer.diskStorage({
+      -  destination: function(req,file,cb){
+           - cb(null,'uploads/'); // Destination folder - where the uploaded images will be stored
+       - },
+       - filename:function(req,file,cb){
+          - cb(null,Date.now() + '-' + file.originalname); // Generating a unique filename
+        -}
+  - });"
+  
+  - "const addFirm = async (req,res) => {
+   - try {
+        - body nunchi vastunna properties
+        - const {firmName, area, category, region, offer} = req.body;
+
+        - Image - remaining properties to separate ga vastundi kabati
+        - "const image = req.file? req.file.filename: undefined;"
+
+        - vendorId kuda kavali - enduku antey vendor ID base meda Firm ni Vendor ki add chestunam ga
+        - "const vendor = await Vendor.findById(req.vendorId);"
+
+        - Incase vendor fail ithey 
+        - "if(!vendor){
+          -  res.status(404).json({message:"Vendor not found"});
+        - }" 
+
+        - oka Instance dwara e properties nunchi vastunna values ni, records/Database lo save chestam
+        - "const firm = new Firm({
+          - "firmName, area, category, region, offer, image, vendor:vendor._id;"
+          - Firm.js lo - vendor property kuda undi - So, (in behalf of vendor property value) - we are passing vendorId
+        - });"
+        - Save this Instance
+        - "await firm.save();"
+        - Save iyaka, response chupiyaniki oka promise kavali - So edi anta try-catch block lo chestam
+        
+        - Firm successfully ga add ithey
+        - "return res.status(200).json({message:"Firm Added successfully"});"
+
+    - "} catch (error) {
+      - "console.error(error);"
+      - "res.status(500).json("Internal server error");"
+     - }"
+   - };"
+
+   - "module.exports = { addFirm:[upload.single('image'), addFirm] }"
+   - Image unte ela export cheyali
+
+- firmRoutes.js
+    - Firm ni add cheyaniki Route kavali
+    - "const express = require('express');"
+    - "const firmController = require('../controllers/firmController');"
+    - Manam Token based ga, Firm ni Vendor ki add chestunam. Ah Token ni verify cheshi, middleware lo save chesham adhey verifyToken. Ah middleware file ni kuda add(Import) chestaney - Vendor ki Firm add avutadi
+    - "const verifyToken = require('../middlewares/verifyToken');"
+
+    - "const router = express.Router();"
+
+    - "router.post('/add-firm', verifyToken , firmController.addFirm);"
+    - In this case, while defining router , we have to add middleware as a parameter
+
+    - "module.exports = router;"
+    - Also Import this firmRoutesfile.js in index.js file
+    - And create midddleware & give separate path for firmRoutes in index.js
+    - "app.use('/firm',firmRoutes);"
+
+- Adding Firm to Vendor 
+  - Open POSTMAN Software
+  - First create a new vendor
