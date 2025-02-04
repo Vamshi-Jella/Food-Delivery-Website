@@ -7,7 +7,7 @@ const firmRoutes = require('./routes/firmRoutes');
 
 const app = express();
 
-const PORT=4000;
+const PORT= 4000;
 
 dotEnv.config();
 
@@ -28,7 +28,7 @@ app.use('/home',(req,res)=>{
     res.send("<h1> Welcome");
 });
 
-app.use('/homes',(req,res)=>{
-    res.send("<h1> Welcome");
-});
+// app.use('/homes',(req,res)=>{
+//     res.send("<h1> Welcome");
+// });
 

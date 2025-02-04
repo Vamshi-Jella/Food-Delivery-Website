@@ -12,10 +12,13 @@ const multer = require('multer');
         destination: function(req,file,cb){
             cb(null,'uploads/'); // Destination folder - where the uploaded images will be stored
         },
-        filename:function(req,file,cb){
-            cb(null,Date.now() + '-' + file.originalname); // Generating a unique filename
+        filename: function(req,file,cb){
+            
+            // cb(null,Date.now() + '-' + file.originalname);
+            cb(null, Date.now() + path.extname(file.originalname)); // Generating a unique filename
         }
     });
+const upload = multer({storage: storage});
 
 const addFirm = async (req,res) => {
     try {
@@ -32,10 +35,18 @@ const addFirm = async (req,res) => {
         if(!vendor){
             res.status(404).json({message:"Vendor not found"});
         } 
-
+        if(vendor.firmlength > 0){
+            return res.status(400).json({message:"Vendor can have only one firm"});
+        }
         //oka Instance dwara e properties nunchi vastunna values ni, records/Database lo save chestam
         const firm = new Firm({
-           firmName, area, category, region, offer, image, vendor:vendor._id
+           firmName, 
+           area, 
+           category, 
+           region, 
+           offer, 
+           image, 
+           vendor: vendor._id
            //Firm.js lo - vendor property kuda undi - So, (in behalf of vendor property value) - we are passing vendorId
         });
         // Save this Instance
@@ -51,5 +62,6 @@ const addFirm = async (req,res) => {
     }
 };
 
-// module.exports = { addFirm: [upload.single('image'),addFirm]};
+// module.exports ={addFirm};
+module.exports = { addFirm: [upload.single('image'),addFirm]};
 // Image unte ela export cheyali

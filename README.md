@@ -428,10 +428,13 @@
            - cb(null,'uploads/'); // Destination folder - where the uploaded images will be stored
        - },
        - filename:function(req,file,cb){
-          - cb(null,Date.now() + '-' + file.originalname); // Generating a unique filename
-        -}
+         - //cb(null,Date.now() + '-' + file.originalname);
+         -  cb(null, Date.now() + path.extname(file.originalname));
+         - Generating a unique filename
+        - }
   - });"
-  
+  - "const upload = multer({storage: storage});"
+
   - "const addFirm = async (req,res) => {
    - try {
         - body nunchi vastunna properties
@@ -447,6 +450,9 @@
         - "if(!vendor){
           -  res.status(404).json({message:"Vendor not found"});
         - }" 
+        - "if(vendor.firmlength > 0){
+           - return res.status(400).json({message:"Vendor can have only one firm"});
+        - }"
 
         - oka Instance dwara e properties nunchi vastunna values ni, records/Database lo save chestam
         - "const firm = new Firm({
@@ -469,7 +475,7 @@
    - "module.exports = { addFirm:[upload.single('image'), addFirm] }"
    - Image unte ela export cheyali
 
-- firmRoutes.js
+ - firmRoutes.js
     - Firm ni add cheyaniki Route kavali
     - "const express = require('express');"
     - "const firmController = require('../controllers/firmController');"
@@ -488,4 +494,4 @@
 
 - Adding Firm to Vendor 
   - Open POSTMAN Software
-  - First create a new vendor
+  - Register a new vendor (localhost:4000/vendor/register) & cross check in Database 
