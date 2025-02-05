@@ -489,6 +489,7 @@
 
     - "module.exports = router;"
     - Also Import this firmRoutesfile.js in index.js file
+    - "const firmRoutes = require('./routes/firmRoutes');"
     - And create midddleware & give separate path for firmRoutes in index.js
     - "app.use('/firm',firmRoutes);"
 
