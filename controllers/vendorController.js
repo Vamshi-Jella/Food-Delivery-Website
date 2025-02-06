@@ -65,4 +65,20 @@ const vendorLogin = async (req,res) => {
 }
 
 
-module.exports = {vendorRegister, vendorLogin}
+const getAllVendors = async (req,res) => {
+    try {
+        //Manam first, vendor model/table nunchi records ni GET chestunam
+        const vendors= await Vendor.find().populate('firm');
+        //vendor records tho patu, vendor lopala unna firm records ni kuda get cheydam anukutunam kabati - populate method use chestam
+        //populate('firm')- firm table nunchi records ni vendor table lo chupiyali anukutunam kabati firm ni populate method ki pass cheyali
+
+        res.json({vendors});
+        //e vendors records ni JSON format lo objects lo chupistam
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error:"Internal server error"});
+    }
+}
+
+
+module.exports = {vendorRegister, vendorLogin, getAllVendors};

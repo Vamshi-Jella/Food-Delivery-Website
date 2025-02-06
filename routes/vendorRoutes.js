@@ -10,5 +10,8 @@ router.post('/register',vendorController.vendorRegister);
 
 router.post('/login',vendorController.vendorLogin);
 
+router.get('/all-vendors',vendorController.getAllVendors);
+//manam records ni get chestunam ga andukey - router.get
+
 module.exports = router;
 // main router ni export chestey - dani lo unna ani routes export ithadi

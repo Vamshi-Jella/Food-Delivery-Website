@@ -50,9 +50,16 @@ const addFirm = async (req,res) => {
            //Firm.js lo - vendor property kuda undi - So, (in behalf of vendor property value) - we are passing vendorId
         });
         // Save this Instance
-        await firm.save();
-        //Save iyaka, response chupiyaniki oka promise kavali - So edi anta try-catch block lo chestam
-        
+       const savedFirm = await firm.save(); //Manam create cheshina firm ni "savedFirm" loki assign chesham
+       //Save iyaka, response chupiyaniki oka promise kavali - So edi anta try-catch block lo chestam
+       
+       //vendor table lo - firm property loki - e savedFirm dwara, manam create cheshina firm(firm record values) ni push chestam(by push method)
+       vendor.firm.push(savedFirm); 
+       //Create a new firm and We can see now in vendors Table(Database lo) a value is added to firm property
+
+       //vendor lo kuda e firm record ni save cheyali
+       await vendor.save();
+
         // Firm successfully ga add ithey
         return res.status(200).json({message:"Firm Added successfully"});
 

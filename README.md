@@ -492,7 +492,73 @@
     - "const firmRoutes = require('./routes/firmRoutes');"
     - And create midddleware & give separate path for firmRoutes in index.js
     - "app.use('/firm',firmRoutes);"
+    - ("firms"- ane table create iyi untadi)
 
 - Adding Firm to Vendor 
-  - Open POSTMAN Software
-  - Register a new vendor (localhost:4000/vendor/register) & cross check in Database 
+  - Open POSTMAN Software 
+  - Database Server start iyaka ne (npm run dev) - API testing cheyochu, POSTMAN Software lo
+  - Register & Login a new vendor (localhost:4000/vendor/register) & cross check in Database ("firms"- ane table create iyi untadi)
+  - Okasari ah vendor details to login ithey - akkada token form iyi untadi , ah token to firm ki add chestam
+  - Adding Firm - By passing Token through Headers
+    - Select new windows in POSTMAN 
+    - POST method - localhost:4000/firm/add-firm
+    - Login iyaka vachey token ni Headers lo pass chestunam, Copy that token
+    - Select Header - Give the values for key & value tables
+    - key = token ( token - which we have write in verifyToken.js - "const token = req.headers.token")
+    - value = Login iyaka vachey token 
+    - Select JSON - write properties
+    - {
+      - "firmName":"Paradise",
+      -  "area":"Begumpet",
+      -  "category":["Veg","Non-Veg"],
+      -  "region":["South-Indian","North-Indian"],
+      -  "offer":"45% off",
+      -  "image":"example.jpg"
+    - }
+    - Click on Send - We will get response ("firm added successfully")
+    - Go the Database - firms Table - A new table is added
+    - If we check in vendors table - In Newly created vendor, firm record is not added
+    - For that go the filmController.js file
+      - "const savedFirm = await firm.save();" 
+      - Manam create cheshina firm ni "savedFirm" loki assign chesham
+      - Save iyaka, response chupiyaniki oka promise kavali - So edi anta try-catch block lo chestam
+       
+      - vendor table lo - firm property loki - e savedFirm dwara, manam create cheshina firm(firm record values) ni push chestam(by push method)
+      - "vendor.firm.push(savedFirm);"
+      - Create a new firm in POSTMAN and We can see now in vendors Table(Database lo), a value is assigned to the firm property
+      - vendor lo kuda e firm record ni save cheyali
+      - "await vendor.save();"
+      - Create a new firm in POSTMAN & check in Database
+      - vendor table lo -  ah vendor ki firm property ki value assign ithadi
+      - firm table lo - ah firm ki vendor property ki value assign ithadi
+      - ela Token base chesukoni, firms ni vendors ki add chestunam
+    - Same Token to Firms ni create chestey - oke Vendor ki 2 firms create ithadi - arrays lo 2 values create ithadi
+    - Vendors Table lo - ah Vendor ki firm property lo, values(IDs) ani array lo assign ithadi
+
+- Get Vendor Records
+  - Database lo chustey values - IDs laga visible ithadi, adhey Names tho visibile avali antey - Controllers lo change cheyavachu (or) - GET method dwara API  create cheshi, ah API tho vendor lopala unna Firms ni detail ga chupiyochu 
+  - Go to the vendorController.js - create getAllVendors function & export it
+    - "const getAllVendors = async (req,res) => {
+       - try {
+          - Manam first, vendor model/table nunchi records ni GET chestunam
+          - "const vendors= await Vendor.find().populate('firm');"
+          - vendor records tho patu, vendor lopala unna firm records ni kuda get cheydam anukutunam kabati - populate method use chestam
+          - populate('firm')- firm table nunchi records ni vendor table lo chupiyali anukutunam kabati firm ni populate method ki pass cheyali
+
+          - "res.json({vendors});"
+          - e vendors records ni JSON format lo objects lo chupistam
+       - } catch (error) {
+          - console.log(error);
+          - res.status(500).json({error:"Internal server error"});
+         - }
+     - }"
+     - Export this function
+     - "module.exports = {vendorRegister, vendorLogin, getAllVendors};"
+     - Creating Route - manam records ni get chestunam ga andukey - router.get
+     - "router.get('/all-vendors',vendorController.getAllVendors);"
+     - GET method kabati - POSTMAN & Browser lo kuda test cheyochu
+     - POSTMAN - GET method - localhost:4000/vendor/all-vendors - ani details JSON format lo vastai
+     - Browser - localhost:4000/vendor/all-vendors - We can see all records in browser
+
+
+
