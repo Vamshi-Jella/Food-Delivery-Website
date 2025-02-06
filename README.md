@@ -560,5 +560,36 @@
      - POSTMAN - GET method - localhost:4000/vendor/all-vendors - ani details JSON format lo vastai
      - Browser - localhost:4000/vendor/all-vendors - We can see all records in browser
 
+  - Fetching Single Individual Vendor Records on ID based
+   - vendorController.js
+   - "const getVendorById = async (req,res) => {
+      - "const vendorId = req.params.id;"
+      - Manam ID based meda vendor records ni Get chestunam 
+      - vendorID anedi query-params nunchi vastundi
+      - query-params antey endpoint(all-vendors) from Url(localhost:4000/vendor/all-vendors)
+      - req.params.id - e id ni Ah Route(all-vendors) loki dymanic pass chestunam
+     
+      - try {
+         - vendor id ni - Get chestunam, Vendor Model nunchi 
+         - every individual vendor ki unique id undi, adi Vendor Model table lo undi
+         - "const vendor = await Vendor.findById(vendorId);"
+         - Vendor - Vendor Model table lo
+         - findById(vendorId) - findById method tho mana "vendorId" ni find cheshi - "vendor" ane variable ki assign chestunam
+
+         - Incase, if our "vendorId" is not found - ade "vendor" ki assign chesham ga
+         - "if(!vendor){
+           - return res.status(404).json({error:"Vendor not found"});
+         - }"
+        
+         - "res.status(200).json({vendor});"
+         - vendor details JSON format lo respone vastadi
+
+       - } catch (error) {
+        - "console.log(error);"
+        - "res.status(500).json({error:"Internal server error"});"
+       - }"
+     - }"
+    - Export this function & Create a route
+
 
 

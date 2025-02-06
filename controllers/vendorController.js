@@ -80,5 +80,33 @@ const getAllVendors = async (req,res) => {
     }
 }
 
+const getVendorById = async (req,res) => {
+    //Manam ID based meda vendor records ni Get chestunam 
+    const vendorId = req.params.id;
+    //vendorID anedi query-params nunchi vastundi
+    //query-params antey endpoint(all-vendors) from Url(localhost:4000/vendor/all-vendors)
+    //req.params.id - e id ni Ah Route(all-vendors) loki dymanic pass chestunam
 
-module.exports = {vendorRegister, vendorLogin, getAllVendors};
+    
+    try {
+        //vendor id ni - Get chestunam, Vendor Model nunchi 
+        //every individual vendor ki unique id undi, adi Vendor Model table lo undi
+        const vendor = await Vendor.findById(vendorId);
+        //Vendor - Vendor Model table lo
+        //findById(vendorId) - findById method tho mana "vendorId" ni find cheshi - "vendor" ane variable ki assign chestunam
+
+        //Incase, if our "vendorId" is not found - ade "vendor" ki assign chesham ga
+        if(!vendor){
+            return res.status(404).json({error:"Vendor not found"});
+        }
+        
+        res.status(200).json({vendor});
+        //vendor details JSON format lo respone vastadi
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error:"Internal server error"});
+    }
+}
+
+module.exports = {vendorRegister, vendorLogin, getAllVendors, getVendorById};
