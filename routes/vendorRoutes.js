@@ -13,5 +13,8 @@ router.post('/login',vendorController.vendorLogin);
 router.get('/all-vendors',vendorController.getAllVendors);
 //manam records ni get chestunam ga andukey - router.get
 
+router.get('/single-vendor/:id', vendorController.getVendorById);
+// e id - getVendorById function lo - "const vendorId = req.params.id;"
+
 module.exports = router;
 // main router ni export chestey - dani lo unna ani routes export ithadi

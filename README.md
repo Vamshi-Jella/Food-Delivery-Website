@@ -590,6 +590,14 @@
        - }"
      - }"
     - Export this function & Create a route
-
+    - "module.exports = {vendorRegister, vendorLogin, getAllVendors, getVendorById};"
+    - vendorRoutes.js - create a route
+    - "router.get('/single-vendor/:id', vendorController.getVendorById);"
+    -  e id - getVendorById function lo - "const vendorId = req.params.id;"
+    - We can write any word instead of id -"const vendorId = req.params.id;" -('/single-vendor/:apple')
+    - Browser lo test chestey - vendor details vastai
+    - Browser lo without ':' type cheyali - "localhost:4000/vendor/single-vendor/id" - id=._id (Database lo unde vendor oka ._id value)
+    - vendor ki firm untey,firm - id values lo visible ithadi, firm record values kuda visible avali antey - getVendorById function lo populate method lo firm ni pass cheyali
+    - "const vendor = await Vendor.findById(vendorId).populate('firm');"
 
 

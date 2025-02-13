@@ -86,14 +86,14 @@ const getVendorById = async (req,res) => {
     //vendorID anedi query-params nunchi vastundi
     //query-params antey endpoint(all-vendors) from Url(localhost:4000/vendor/all-vendors)
     //req.params.id - e id ni Ah Route(all-vendors) loki dymanic pass chestunam
-
     
     try {
         //vendor id ni - Get chestunam, Vendor Model nunchi 
         //every individual vendor ki unique id undi, adi Vendor Model table lo undi
-        const vendor = await Vendor.findById(vendorId);
+        const vendor = await Vendor.findById(vendorId).populate('firm');
         //Vendor - Vendor Model table lo
         //findById(vendorId) - findById method tho mana "vendorId" ni find cheshi - "vendor" ane variable ki assign chestunam
+        //vendor ki firm untey,firm - id values lo visible ithadi, firm record values kuda visible avali antey - getVendorById function lo populate method lo firm ni pass cheyali
 
         //Incase, if our "vendorId" is not found - ade "vendor" ki assign chesham ga
         if(!vendor){
