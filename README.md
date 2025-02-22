@@ -600,4 +600,59 @@
     - vendor ki firm untey,firm - id values lo visible ithadi, firm record values kuda visible avali antey - getVendorById function lo populate method lo firm ni pass cheyali
     - "const vendor = await Vendor.findById(vendorId).populate('firm');"
 
+- Products
+  - Products are created same as, How we are added properties to Vendor & firm and created a relation b/w firm and vendors
+  - Here, Products relation-direct ga Firm to untadi, Firm relation-direct ga Vendor to untadi - Products-Vendor indirect relation hashed_ga_untadi
+  - Same process - Models, Controllers, Routes create cheshi , Products ki APIs create cheyali
+   
+- Products Model - Product.js - model folder
+  - Create a Product.js file in models
+   - const mongoose = require('mongoose');
+   - Define Properties for Products
+   - const productSchema = new mongoose.Schema({
+    - productName: {
+       - type:String,
+       - required:true
+      - },
+    - price:{
+       - type:String,
+       - required:true
+      - },
+    - category:{
+       - type:[
+           - {
+             -   type:String,
+             -   enum:['Veg', 'Non-Veg']
+           - }
+       - ]
+     - },
+    - // Multiple Values ki - properties ela rayali(array lo rayali)
+    - image:{
+      - type:String
+     - },
+    - bestSeller:{
+      -  type:String
+     - },
+    - description:{
+      -  type:String
+     - },
+    - //Relation
+    - firm:[{
+      -  type: mongoose.Schema.Types.ObjectId,
+      -  ref:'Firm' 
+     - }],
+    -  // e command & reference to - firm table to e product table ni relate chesham
+    -  //Product Model create chesham, relation kuda echam, a relation firm lo kuda add cheyali
+    - In firm.js - firmSchema property lo product relation add cheyali
+      - product:[
+          -  {
+            -    type: mongoose.Schema.Types.ObjectId,
+            -    ref:'Product'
+           - }
+         - ]
+     
+   - });
+
+  - const Product = mongoose.model('Product',productSchema);
+  - module.exports = Product;
 

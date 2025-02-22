@@ -18,7 +18,7 @@ const firmSchema= new mongoose.Schema({
             }
         ]
     },
-    // Multiple Values ki - properties ela rayali
+    // Multiple Values ki - properties ela rayali(array lo rayali)
     region:{
         type:[
             {
@@ -38,11 +38,17 @@ const firmSchema= new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'vendor'
         }
-    ]
+    ],
     // epudu ithey type lo - default method pass cheshamo, apudu e Firm ah Vendor Model ki link ithadi / relate chestunam
     // nko key value eyali - reference -"ref" - ae Model tho - Database lo unna ae table tho, e Firm table relate avutundi / relate cheyali ani
     // ela Firm-Vendor relation form chestam
     // elage e relation ni Vendor Model lo add cheyali
+    product:[
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref:'Product'
+            }
+        ]
     
 });
 

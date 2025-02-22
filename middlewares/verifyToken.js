@@ -1,5 +1,5 @@
 // vendorId - Vendor model lo undi kabati - Vendor ni require/import chesukovali
-const Vendor = require('../models/Vendor'); 
+const Vendor = require("../models/Vendor"); 
 // Token ni verify chesukoni - JWT Token kavali
 const jwt = require('jsonwebtoken');
 const dotEnv = require('dotenv');

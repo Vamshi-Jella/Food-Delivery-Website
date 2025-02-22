@@ -1,5 +1,5 @@
 const Firm = require('../models/Firm');
-const Vendor = require('../models/Vendor');
+const Vendor = require("../models/Vendor");
 const multer = require('multer');
 
 // -- Adding Images
@@ -13,8 +13,6 @@ const multer = require('multer');
             cb(null,'uploads/'); // Destination folder - where the uploaded images will be stored
         },
         filename: function(req,file,cb){
-            
-            // cb(null,Date.now() + '-' + file.originalname);
             cb(null, Date.now() + path.extname(file.originalname)); // Generating a unique filename
         }
     });
@@ -22,7 +20,7 @@ const upload = multer({storage: storage});
 
 const addFirm = async (req,res) => {
     try {
-        //body nunchi vastunna properties
+        //body nunchi vastunna properties, anduke - "req.body"
         const {firmName, area, category, region, offer} = req.body;
 
         //Image - remaining properties to separate ga vastundi kabati
