@@ -4,6 +4,8 @@ const mongoose=require('mongoose');
 const vendorRoutes = require('./routes/vendorRoutes');
 const bodyParser = require('body-parser');
 const firmRoutes = require('./routes/firmRoutes');
+const productRoutes = require('./routes/productRoutes');
+
 
 const app = express();
 
@@ -18,6 +20,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use(bodyParser.json());
 app.use('/vendor',vendorRoutes);
 app.use('/firm',firmRoutes);
+app.use('/product',productRoutes);
 
 app.listen(PORT,()=>{
     console.log(`Server started & running at ${PORT}`);

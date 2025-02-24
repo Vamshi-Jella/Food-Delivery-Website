@@ -656,3 +656,10 @@
   - const Product = mongoose.model('Product',productSchema);
   - module.exports = Product;
 
+- Create a productController.js file
+- Create a productRoutes.js file
+- index.js
+  - Add productRoutes & create a middleware
+  - "const productRoutes = require('./routes/productRoutes');"
+  - "app.use('/product',productRoutes);"
+  

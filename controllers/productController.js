@@ -1,6 +1,7 @@
 const Product = require("../models/Product");
 // Images kuda unnai kabati, Images ni import chesukoniki - multer package
 const multer = require("multer");
+const Firm = require("../models/Firm");
 
 
 // -- Adding Images
@@ -33,6 +34,7 @@ const addProduct = async (req,res) => {
          const firmId= req.params.firmId;
          //firmId create chesham
          //e code similar to getVendorById function lo vendorId ni get cheshey code
+         //Ekada "firmId= req.params.firmId" antey firmId = params nunchi get chestunam, kabati e ".firmId" ni dynamic ga route lo add cheyali
          
 
          //firmId ni get cheyaniki
@@ -42,8 +44,28 @@ const addProduct = async (req,res) => {
          if(!firm){
             return res.status(404).json({error:"No firm found"});
          }
+         //Oka instance create cheshi mana products property ni instance ki save cheshi, ah instance dwara(products properties ni) Product Model loki add(push) chestunam, edi cheyali antey Database loki add cheyali
+         const product = new Product ({
+            productName, price, category, bestseller, description, image, firm:firm._id
+         })
+         //Product Model lo firm kuda property ey kabati, firm kuda add chestunam
+         //Database lo firm table id - "_id" ani untadi andukey firm:firm._id
+
+         const savedProduct = await Product.save();
+         //Above products ani Product Model loki save chestunam
+
+         firm.products.push(savedProduct);
+         //e saved product ni firm loki push chestunam
+         //Push cheshaka firm ni kuda save chestunam
+         await firm.save();
+         
+         //Above process ok/success ithey, e response vastadi
+         res.status(200).json(savedProduct)
 
     } catch (error) {
-        
+        console.error(error); // console.error(error) = console.log(error)
+        res.status(500).json({error:"Internal server error"})
     }
 }
+
+module.exports = {addProduct:[upload.single('image'), addProduct]};
